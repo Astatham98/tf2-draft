@@ -1,7 +1,7 @@
 import requests
 import pickle
 
-def get_etf2l_stats(matche):
+def get_etf2l_stats(match):
     
     url = f"https://api-v2.etf2l.org/matches/{match}"
     web = requests.get(url).json()
@@ -19,6 +19,7 @@ def get_etf2l_stats(matche):
         player_score_ids_c2 = {id: c2score for id, tid in player_team_ids.items() if tid == c2id}
         merged_score_ids = player_score_ids_c1 | player_score_ids_c2
         return merged_score_ids, match_stats['time'], match_stats['submitted'], match_stats['maps']
+    return
         
 def get_logs_stats(id64, before, after, etf2l_maps):
     join_ids = 'player=' + ','.join(id64)
@@ -59,10 +60,15 @@ def filter_titles(title):
 
 
     
-        
-with open("prem_match_ids_prev", "rb") as fp:
-        match_ids = pickle.load(fp)
-
-for match in match_ids[:5]:
-    id64_score, game_time, submitted_time, maps = get_etf2l_stats(match)
-    get_logs_stats(id64_score.keys(), game_time, submitted_time, maps)
+def get_log_ids(pickeList):     
+    with open(pickeList, "rb") as fp:
+            match_ids = pickle.load(fp)
+    ids = []
+    for match in match_ids:
+        if get_etf2l_stats(match) is not None:
+            id64_score, game_time, submitted_time, maps = get_etf2l_stats(match)
+            logs = get_logs_stats(id64_score.keys(), game_time, submitted_time, maps)
+            ids.append([log['id'] for log in logs])
+        else: continue
+    
+    return ids, id64_score

@@ -1,8 +1,10 @@
 
+[] - typing / commenting
 [] - Think of less naive ways to deal with logs
     -[] logs with more than 12 players
     -[] logs that are combined
     -[] logs where a player doesn't get a kill in a golden cap
-[] - brain storm what stats needs pulling out
+[x] - brain storm what stats needs pulling out
 [] - create a datebase for players
-[] - create a database for matches 
+[x] - create a database for matches 
+[x] - parse the week played to the database

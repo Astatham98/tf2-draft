@@ -4,8 +4,8 @@ from steamid_converter import Converter
 import sqlite3
 
 def log_parser(pickleList):
-    ids, id64_score, id64_week = get_log_ids(pickleList)
-    for match in ids:
+    ids, id64_score, weeks = get_log_ids(pickleList)
+    for idx, match in enumerate(ids):
         for log in match:
             log_json = requests.get('http://logs.tf/json/{}'.format(log)).json()
             if not log_json['success']:
@@ -17,8 +17,7 @@ def log_parser(pickleList):
                     player_id64 = Converter.to_steamID64(player_id)
                     mainClass = getMainClass(player_values)
                     score = id64_score.get(player_id64)
-                    week = id64_week.get(player_id64)
-                    print(week)
+                    week = weeks[idx]
                     match mainClass:
                         case 'scout':
                             scout_stats = get_scout_stats(player_values, time)
